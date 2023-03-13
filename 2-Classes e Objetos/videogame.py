@@ -17,11 +17,20 @@ class Videogame:
         self.numero_serie = self.obter_num_serie()
         self.incrementar_num_serie()
 
-    def obter_num_serie(self):
-        return self.__class__.__ULTIMO_NUM_SERIE + 1
+    @staticmethod
+    def validar_max_anos_garantia(anos):
+        if anos > 10:
+            print("Máximo de anos de garantia excedido")
+        else:
+            print("Garantia ok")
+
+    @classmethod
+    def obter_num_serie(cls):
+        return cls.__ULTIMO_NUM_SERIE + 1
     
-    def incrementar_num_serie(self):
-        self.__class__.__ULTIMO_NUM_SERIE += 1
+    @classmethod
+    def incrementar_num_serie(cls):
+        cls.__ULTIMO_NUM_SERIE += 1
 
     def instalar_jogo(self, jogo):
         self.jogos_instalados.append(jogo)
@@ -60,3 +69,6 @@ v3.anos_garantia = 2
 v3.instalar_jogo("Counter Strike")
 v3.instalar_jogo("Final Fantasy XX")
 print(v3)
+
+print("Ultimo numero de serie: ", Videogame.obter_ultimo_num_serie())
+Videogame.validar_max_anos_garantia(9)
