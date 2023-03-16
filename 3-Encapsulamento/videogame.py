@@ -8,12 +8,12 @@ class Videogame:
         if data_fabricacao == None:
             self.__data_fabricacao = datetime.today()
         else:
-            self.__data_fabricacao = datetime.strptime(data_fabricacao, '%d/%m/%Y')
-        self.__marca = marca
-        self.__modelo = modelo
-        self.__capacidade_hd = 50
+            self.data_fabricacao = data_fabricacao
+        self.marca = marca
+        self.modelo = modelo
+        self.capacidade_hd = 50
+        self.anos_garantia = 1
         self.__jogos_instalados = []
-        self.__anos_garantia = 1
         self.__numero_serie = self.obter_num_serie()
         self.__incrementar_num_serie()
 
@@ -31,6 +31,8 @@ class Videogame:
     
     @marca.setter
     def marca(self, marca):
+        marcas_validas = ["Nintendo", "Microsoft", "Sony"]
+        assert marca in marcas_validas, "Informe uma marca válida"
         self.__marca = marca
     
     @property
@@ -98,6 +100,7 @@ class Videogame:
         """
     
 v1 = Videogame('12/02/2020')
+v1.data_fabricacao = '12/02/2020'
 v1.modelo = "Switch"
 v1.marca = "Nintendo"
 v1.capacidade_hd = 64
@@ -120,6 +123,8 @@ v3.capacidade_hd = 512
 v3.anos_garantia = 2
 v3.instalar_jogo("Counter Strike")
 v3.instalar_jogo("Final Fantasy XX")
+v3.jogos_instalados.append("NOVO JOGO")
+v3.jogos_instalados.pop()
 print(v3)
 
 print("Ultimo numero de serie: ", Videogame.obter_num_serie())
