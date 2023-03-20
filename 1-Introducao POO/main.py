@@ -1,5 +1,4 @@
 from onibus import Onibus, Garagem
-
 onibus1 = Onibus(40, "Mercedez")
 onibus1.acelerar(50)
 onibus1.acelerar(20)
@@ -19,5 +18,6 @@ g.adicionar_veiculo()
 
 onibus2 = Onibus(30, "X")
 micro_onibus = Onibus(15, "XYZ")
+onibus2.estacionar()
 
 

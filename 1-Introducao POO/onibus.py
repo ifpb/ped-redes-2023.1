@@ -3,13 +3,18 @@ class Onibus:
         self.lugares = lugares
         self.marca = marca
         self.velocidade = velocidade
-        self.direcao = 0
+        self.__direcao = 0
 
-    def mudar_direcao(self, dir):
+    @property
+    def direcao(self):
+        return self.__direcao
+
+    @direcao.setter
+    def direcao(self, dir):
         if self.velocidade == 0:
             print("Não é possível mudar de direção parado")
         else:
-            self.direcao = dir
+            self.__direcao = dir
 
     def acelerar (self, valor) :
         self.velocidade += valor
@@ -26,6 +31,7 @@ class Onibus:
 
 class Garagem:
     def __init__(self, vagas):
+        print("Garagem construída!")
         self.vagas = vagas
 
     def adicionar_veiculo(self):
@@ -33,3 +39,6 @@ class Garagem:
     
     def retirar_veiculo(self):
         self.vagas += 1
+
+    def __del__(self):
+        print("Garagem destruída!")
