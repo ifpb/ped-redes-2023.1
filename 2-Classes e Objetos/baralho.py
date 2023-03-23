@@ -156,7 +156,6 @@ class Partida:
             print(f"Jogador {vencedores[0].id} foi o vencedor!")
         else:
             print(f"Temos um empate entre os jogadores: {[j.id for j in vencedores]}")
-
 if __name__ == '__main__':
     ## Parte 1: ###
     baralho = Baralho()
@@ -165,7 +164,7 @@ if __name__ == '__main__':
 
     ## Parte 2: ###
     try:
-        partida = Partida(int(input("Digite o número de jogadores: "))))
+        partida = Partida(int(input("Digite o número de jogadores: ")))
         partida.imprimir_distribuicao_cartas()
         partida.imprimir_ranking_pontuacao()
         partida.declarar_vencedor()
