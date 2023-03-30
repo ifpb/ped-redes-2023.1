@@ -1,7 +1,15 @@
 from enum import Enum
 
 
+class SalarioMenorQueOMinimo(Exception):
+    def __init__(self, mensagem):
+        super().__init__(mensagem)
+
+
 class Funcionario:
+
+    SALARIO_MINIMO = 1212.00
+
     def __init__(self, nome, salario):
         self.nome = nome
         self.salario = salario
@@ -11,6 +19,17 @@ class Funcionario:
 
     def ganho_anual(self):
         return self.salario * 12
+
+    @property
+    def salario(self):
+        return self.__salario
+
+    @salario.setter
+    def salario(self, salario):
+        assert type(salario) == float or type(salario) == int, "O valor do salário deve ser float ou int"
+        if salario < Funcionario.SALARIO_MINIMO:
+            raise SalarioMenorQueOMinimo("Salário não pode ser menor do que o mínimo "+str(Funcionario.SALARIO_MINIMO))
+        self.__salario = salario
 
     def exibe_dados(self):
         return f"""
@@ -35,6 +54,7 @@ class Assistente(Funcionario):
 
     @matricula.setter
     def matricula(self, matricula):
+        assert len(matricula) <= 16, "Matrícula deve ter menos que 16 caracteres"
         self.__matricula = matricula
 
 
@@ -43,6 +63,16 @@ class AssistenteAdministrativo(Assistente):
         super().__init__(nome, salario, matricula)
         self.bonus_salarial = bonus_salarial
         self.salario += bonus_salarial
+
+    @property
+    def bonus_salarial(self):
+        return self.__bonus_salarial
+    
+    @bonus_salarial.setter
+    def bonus_salarial(self, bonus_salarial):
+        assert type(bonus_salarial) == int or type(bonus_salarial) == float, "Bônus salarial deve ser do tipo int ou float"
+        assert bonus_salarial >= 0, "Bônus deve ser maior ou igual a zero"
+        self.__bonus_salarial = bonus_salarial
 
 
 class Turno(Enum):
@@ -57,13 +87,37 @@ class AssistenteTecnico(Assistente):
         self.adicional_noturno = adicional_noturno
         self.salario += self.adicional_noturno if self.turno == Turno.NOITE else 0
 
+    @property
+    def adicional_noturno(self):
+        return self.__adicional_noturno
+
+    @adicional_noturno.setter
+    def adicional_noturno(self, adicional_noturno):
+        assert type(adicional_noturno) == int or type(adicional_noturno) == float, "adicional noturno deve ser int ou float"
+        assert adicional_noturno >= 0, "adicional noturno deve ser um número positivo"
+        self.__adicional_noturno = adicional_noturno
+
+    @property
+    def turno(self):
+        return self.__turno
+
+    @turno.setter
+    def turno(self, turno):
+        assert type(turno) == Turno, "O turno deve ser um valor do enum Turno"
+        self.__turno = turno
+
 
 if __name__ == '__main__':
-    assistente = Assistente("José", 1500, "312321")
-    print(assistente.exibe_dados())
+    try:
+        assistente = Assistente("José", 1250, "312321")
+        print(assistente.exibe_dados())
 
-    assistente_tecnico = AssistenteTecnico("Técnico", 1500, "32424", Turno.NOITE, 150.00)
-    print(assistente_tecnico.exibe_dados())
+        assistente_tecnico = AssistenteTecnico("Técnico", 1500, "32424", Turno.NOITE, 150.00)
+        print(assistente_tecnico.exibe_dados())
 
-    assistente_administrativo = AssistenteAdministrativo("Administrativo", 1500, "23232", 50.00)
-    print(assistente_administrativo.exibe_dados())
+        assistente_administrativo = AssistenteAdministrativo("Administrativo", 1500, "23232", 50.0)
+        print(assistente_administrativo.exibe_dados())
+    except SalarioMenorQueOMinimo as e:
+        print(e)
+    except AssertionError as e:
+        print(e)
