@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Pessoa:
+class Pessoa(ABC):
     def __init__(self, nome, endereco, telefone):
         self.nome = nome
         self.endereco = endereco
@@ -13,6 +13,7 @@ class Pessoa:
 
     @nome.setter
     def nome(self, nome):
+        assert nome != "", "nome não pode ser vazio"
         self.__nome = nome
 
     @property
@@ -33,7 +34,7 @@ class Pessoa:
 
 
 class Fornecedor(Pessoa):
-    def __init__(self, nome, endereco, telefone, valor_credito, valor_divida) -> None:
+    def __init__(self, nome, endereco, telefone, valor_credito, valor_divida):
         super().__init__(nome, endereco, telefone)
         self.valor_credito = valor_credito
         self.valor_divida = valor_divida
@@ -101,12 +102,31 @@ class Empregado(Pessoa):
 
     @comissao.setter
     def comissao(self, comissao):
-        assert type(comissao) == float  and 0 <= comissao <= 1, "comissao deve ser um float entre 0 e 1"
+        assert type(comissao) == float and 0 <= comissao <= 1, "comissao deve ser um float entre 0 e 1"
         self.__comissao = comissao
 
     @abstractmethod
     def calcular_salario(self):
         return self.salario_base - (self.salario_base * self.imposto)
+
+
+class Administrador(Empregado):
+    def __init__(self, nome, endereco, telefone, codigo_setor, salario_base, imposto, comissao, ajuda_de_custo):
+        super().__init__(nome, endereco, telefone, codigo_setor, salario_base, imposto, comissao)
+        self.ajuda_de_custo = ajuda_de_custo
+
+    @property
+    def ajuda_de_custo(self):
+        return self.__ajuda_de_custo
+
+    @ajuda_de_custo.setter
+    def ajuda_de_custo(self, ajuda_de_custo):
+        assert type(ajuda_de_custo) == int or type(ajuda_de_custo) == float, "ajuda de custo deve ser um número"
+        assert ajuda_de_custo >= 0, "ajuda de custo deve ser maior ou igual a zero"
+        self.__ajuda_de_custo = ajuda_de_custo
+
+    def calcular_salario(self):
+        return super().calcular_salario() + self.ajuda_de_custo
 
 
 class Operario(Empregado):
@@ -120,6 +140,8 @@ class Operario(Empregado):
 
     @valor_producao.setter
     def valor_producao(self, valor_producao):
+        assert type(valor_producao) == int or type(valor_producao) == float, "valor de produção deve ser um número"
+        assert valor_producao >= 0, "valor de produção deve ser maior ou igual a zero"
         self.__valor_producao = valor_producao
 
     def calcular_salario(self):
@@ -127,7 +149,7 @@ class Operario(Empregado):
 
 
 class Vendedor(Empregado):
-    def __init__(self, nome, endereco, telefone, codigo_setor, salario_base, imposto, comissao, valor_vendas) -> None:
+    def __init__(self, nome, endereco, telefone, codigo_setor, salario_base, imposto, comissao, valor_vendas):
         super().__init__(nome, endereco, telefone, codigo_setor, salario_base, imposto, comissao)
         self.valor_vendas = valor_vendas
 
@@ -138,6 +160,7 @@ class Vendedor(Empregado):
     @valor_vendas.setter
     def valor_vendas(self, valor_vendas):
         assert type(valor_vendas) == int or type(valor_vendas) == float, "valorVendas deve ser um número"
+        assert valor_vendas >= 0, "valorVendas deve ser maior ou igual a zero"
         self.__valor_vendas = valor_vendas
 
     def calcular_salario(self):
@@ -149,7 +172,8 @@ if __name__ == '__main__':
     print("Fornecedor =", f.nome)
     print("Saldo =", f.obter_saldo())
 
+    a = Administrador("Joao", "Rua boa", "998238283", 1, 1500.00, 0.2, 0.5, 3000.00)
     o = Operario("Joao", "Rua boa", "998238283", 1, 900.00, 0.2, 0.2, 2000)
     v = Vendedor("Joao", "Rua boa", "998238283", 1, 1500.00, 0.2, 0.5, 3000.00)
-    for p in [o, v]:
+    for p in [a, o, v]:
         print(f"Salário do {p.__class__.__name__} = {p.calcular_salario():.2f}")
