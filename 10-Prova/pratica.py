@@ -39,7 +39,7 @@ class DispositivoDeRede:
         if porta not in self.portas or porta not in dispositivo.portas:
             raise PortaIndisponivel('Porta indisponível')
         self.portas.remove(porta)
-        dispositivo.portas.append(porta)
+        dispositivo.portas.remove(porta)
         print("Dispositivo conectado com sucesso!")
 
     '''
